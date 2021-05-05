@@ -1,0 +1,24 @@
+$libSystemStatDef = @"
+    //c# p/invoke
+    const string libPath = @"libsystem_stats.dylib";
+    [DllImport(libPath)]
+    public static extern UInt64 get_used_memory_info();
+
+    [DllImport(libPath)]
+    public static extern UInt64 get_total_memory_info();
+
+    [DllImport(libPath)]
+    public static extern void get_processes();
+
+"@
+
+$targetType = Add-Type -MemberDefinition $libSystemStatDef -Name "SystemInfo" -PassThru
+#$targetType | Get-Member
+
+#$addTargetType = Add-Type -MemberDefinition $libSystemStatDef -Name AddNumbers -PassThru
+
+$targetType::get_used_memory_info()
+$targetType::get_total_memory_info()
+#$targetType::get_system_info()
+
+#$targetType::get_processes();

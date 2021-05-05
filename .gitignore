@@ -1,0 +1,22 @@
+.vscode/
+# GetSystemStats Project
+GetSystemStats/bin
+GetSystemStats/obj
+
+# GetSystemStats Tests
+GetSystemStatsTest/bin
+GetSystemStatsTest/obj
+
+# system-stats lib
+system-stats/target
+Cargo.lock
+
+
+# Misc at repo root
+*.trace
+.DS_Store
+
+
+
+
+

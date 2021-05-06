@@ -5,6 +5,7 @@ namespace GetSystemStats
 {
     public class SystemStatWarapper : IDisposable
     {
+        private bool disposed = false;
         LoadAverageHandle LoadAverageHandle;
         
         SystemInfoHandle SystemInfoHandle;
@@ -54,6 +55,36 @@ namespace GetSystemStats
             LoadAverageHandle.Dispose();
             SystemInfoHandle.Dispose();
             CoreUsageHandle.Dispose();
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if(!this.disposed)
+            {
+                if(disposing)
+                {
+                    // technically dispose managed objects here...I don't have any
+                }
+                if(this.LoadAverageHandle != null && !this.LoadAverageHandle.IsInvalid)
+                {
+                    LoadAverageHandle.Dispose();
+                    //this.disposed = true;
+                }
+
+                if(this.SystemInfoHandle != null && !this.SystemInfoHandle.IsInvalid)
+                {
+                    SystemInfoHandle.Dispose();
+                    //this.disposed = true;
+                }
+
+                if(this.CoreUsageHandle != null && !this.CoreUsageHandle.IsInvalid)
+                {
+                    CoreUsageHandle.Dispose();
+                    // this.disposed = ture;
+                }
+                this.disposed = true;
+
+            }
         }
     }
 

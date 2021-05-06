@@ -52,9 +52,8 @@ namespace GetSystemStats
 
         public void Dispose()
         {
-            LoadAverageHandle.Dispose();
-            SystemInfoHandle.Dispose();
-            CoreUsageHandle.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         protected virtual void Dispose(bool disposing)

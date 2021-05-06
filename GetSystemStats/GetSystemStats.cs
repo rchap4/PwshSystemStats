@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Management.Automation;
-//using System.Management.Automation.Runspaces;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -14,21 +13,23 @@ namespace GetSystemStats
         // Save me as the TODO is to make some
         // Stats optional or default to brief output with an option
         // for all stats.  
-        // [Parameter(
-        //     Mandatory = true,
-        //     Position = 0,
-        //     ValueFromPipeline = true,
-        //     ValueFromPipelineByPropertyName = true)]
-        // public int FavoriteNumber { get; set; }
+
+        private bool includeLoadAverage;
+        [Parameter(
+            Mandatory = false,
+            Position = 0,
+            ValueFromPipeline = false,
+            ValueFromPipelineByPropertyName = false)]        
+        public SwitchParameter IncludeLoadAverage
+        { 
+            get { return includeLoadAverage; }
+            set { includeLoadAverage = value; } 
+        }
 
         // [Parameter(
         //     Position = 1,
         //     ValueFromPipelineByPropertyName = true)]
         // [ValidateSet("Cat", "Dog", "Horse")]
-
-        // LoadAverageHandle loadAverageHandle;
-        // CoreUsageHandle coreUsageHandle;
-        // SystemInfoHandle systemInfoHandle;
 
         SystemStats output = new SystemStats();
         
@@ -46,10 +47,12 @@ namespace GetSystemStats
             using (SystemStatWarapper functions = new SystemStatWarapper())
             {
 
-                var loadAverage = functions.GetLoadAverage().AsStruct();
-                output.OneMinLoadAverage = loadAverage.one;
-                output.FiveMinLoadAverage = loadAverage.five;
-                output.FifthteenMinLoadAverage = loadAverage.fifteen;
+                if(includeLoadAverage) {
+                    var loadAverage = functions.GetLoadAverage().AsStruct();
+                    output.OneMinLoadAverage = loadAverage.one;
+                    output.FiveMinLoadAverage = loadAverage.five;
+                    output.FifthteenMinLoadAverage = loadAverage.fifteen;
+                }
 
                 output.TotalMemory =
                     (functions.GetTotalMemory() /
@@ -89,7 +92,7 @@ namespace GetSystemStats
         // This method will be called once at the end of pipeline execution; if no input is received, this method is not called
         protected override void EndProcessing()
         {
-            //
+            base.EndProcessing();
         }
 
         protected override void StopProcessing()
@@ -111,11 +114,11 @@ namespace GetSystemStats
 
         public string ProcessorCoreUsage { get; set; }
 
-        public double OneMinLoadAverage { get; set; }
+        public double? OneMinLoadAverage { get; set; }
 
-        public double FiveMinLoadAverage { get; set; }
+        public double? FiveMinLoadAverage { get; set; }
 
-        public double FifthteenMinLoadAverage { get; set; }
+        public double? FifthteenMinLoadAverage { get; set; }
 
         public IEnumerable<DiskUsage> DiskUsageInfo { get; set; }
 

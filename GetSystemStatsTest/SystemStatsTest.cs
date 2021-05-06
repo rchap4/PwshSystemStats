@@ -1,7 +1,5 @@
-using System;
 using Xunit;
 using GetSystemStats;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace GetSystemStatsTest
@@ -14,10 +12,12 @@ namespace GetSystemStatsTest
         {
             // Arrange
             var wrapper = new SystemStatWarapper();
+
             // Act
             var totalMemory = wrapper.GetTotalMemory();
             var usedMemory = wrapper.GetUsedMemory();
             var freeMemory = wrapper.GetAvailableMemory();
+
             // Assert
             Assert.True(totalMemory >= 0);
             Assert.True(usedMemory >= 0);
@@ -64,23 +64,20 @@ namespace GetSystemStatsTest
         {
             
             // Arrange
-            //UInt64 freespace = 0;
-
             var diskWrapper = new DiskStatWrapper();
             
+            // Act
             diskWrapper.QueryDiskInfo();
-            //freespace = diskWrapper.GetDiskInfo().FirstOrDefault();
             var diskFreespace = diskWrapper.GetDiskInfo().Item1.Select(d => new DiskUsage() { FreeSpace = d});
             var diskTotalspace = diskWrapper.GetDiskInfo().Item2.Select(d => new DiskUsage() { TotalSpace = d });
+            
             // Assert
             var usage = diskFreespace.Zip(diskTotalspace);
-            Console.WriteLine($"Usage length = {usage.Count()}");
             foreach(var d in usage)
             {
                 Assert.True(d.First.FreeSpace > 0);
                 Assert.True(d.Second.TotalSpace > 0);
             }
-            //diskWrapper.Dispose();
         }
 
 

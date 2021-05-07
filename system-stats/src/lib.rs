@@ -70,8 +70,7 @@ impl DiskInfo {
 pub extern "C" fn get_used_memory_info() -> u64 {
     let sys = System::new_all();
     
-    let used_mem = sys.get_used_memory();
-    used_mem
+    sys.get_used_memory()
 }
 
 #[no_mangle]
@@ -106,14 +105,18 @@ pub extern "C" fn get_system_info() -> *mut c_char {
     
 }
 
+/// # Safety
+///
+/// This function should not be called if the pointer passed
+/// in is null or invalid.  Pass in a valid pointer to free it exactly once.
 #[no_mangle]
-pub extern "C" fn free_system_info_results(s: *mut c_char) {
-    unsafe {
-        if s.is_null() {
-            return;
-        }
-        CString::from_raw(s)
-    };
+pub unsafe extern "C" fn free_system_info_results(s: *mut c_char) {
+
+    // unsafe
+    if s.is_null() {
+        return;
+    }
+    CString::from_raw(s);
 }
 
 #[no_mangle]
@@ -148,14 +151,18 @@ pub extern "C" fn get_core_usage() -> *mut c_char {
     CString::new(out).unwrap().into_raw()
 } 
 
+/// # Safety
+///
+/// This function should not be called if the pointer passed
+/// in is null or invalid.  Pass in a valid pointer to free it exactly once.
 #[no_mangle]
-pub extern "C" fn free_core_usage(s: *mut c_char) {
-    unsafe {
-        if s.is_null() {
-            return;
-        }
-        CString::from_raw(s)
-    };
+pub unsafe extern "C" fn free_core_usage(s: *mut c_char) {
+
+    // unsafe
+    if s.is_null() {
+        return;
+    }
+    CString::from_raw(s);
 }
 
 #[no_mangle]
@@ -174,15 +181,19 @@ pub extern "C" fn get_load_avg() -> *mut LoadAvg {
     Box::into_raw(Box::new(load_avg))  
 }
 
+/// # Safety
+///
+/// This function should not be called if the pointer passed
+/// in is null or invalid.  Pass in a valid pointer to free it exactly once.
 #[no_mangle]
-pub extern "C" fn free_load_avg(s: *mut LoadAvg) {
+pub unsafe extern "C" fn free_load_avg(s: *mut LoadAvg) {
 
     if s.is_null() {
         return;
     }
-    unsafe {
-        Box::from_raw(s);
-    }
+    
+    // unsafe
+    Box::from_raw(s);
         
 }
 
@@ -198,42 +209,62 @@ pub extern "C" fn disk_info_new() -> *mut DiskInfo {
     Box::into_raw(Box::new(DiskInfo::new()))
 }
 
+/// # Safety
+///
+/// This function should not be called if the pointer passed
+/// in is null or invalid.  Pass in a valid pointer to free it exactly once.
 #[no_mangle]
-pub extern "C" fn free_disk_info(disk_info: *mut DiskInfo) {
+pub unsafe extern "C" fn free_disk_info(disk_info: *mut DiskInfo) {
     if disk_info.is_null() {
         return;
     }
 
-    unsafe {
-        Box::from_raw(disk_info);
-    }
+    // unsafe
+    Box::from_raw(disk_info);
 
 }
 
+/// # Safety
+///
+/// This function should not be called if the pointer passed
+/// in is null or invalid.  Pass in a valid pointer to free it exactly once.
 #[no_mangle]
-pub extern "C" fn disk_info_query(disk_info_ptr: *mut DiskInfo) {
-    let disk_info = unsafe {
+pub unsafe extern "C" fn disk_info_query(disk_info_ptr: *mut DiskInfo) {
+    
+    // unsafe
+    let disk_info = {
         assert!(! disk_info_ptr.is_null());  //panic if null
         &mut *disk_info_ptr
     };
     disk_info.query_disk_usage();
 }
 
+/// # Safety
+///
+/// This function should not be called if the pointer passed
+/// in is null or invalid.  Pass in a valid pointer to free it exactly once.
 #[no_mangle]
-pub extern "C" fn disk_info_get_disk_freespace(disk_info_ptr: *mut DiskInfo,
-                                               index: usize) -> u64 {
-    let disk_info = unsafe {
+pub unsafe extern "C" fn disk_info_get_disk_freespace(disk_info_ptr: *mut DiskInfo,
+                                                     index: usize) -> u64 {
+
+    // unsafe
+    let disk_info = {
         assert!(! disk_info_ptr.is_null());  //panic if null
         &*disk_info_ptr
     };
     disk_info.get_disk_usage_freespace(index)    
 }
 
+/// # Safety
+///
+/// This function should not be called if the pointer passed
+/// in is null or invalid.  Pass in a valid pointer to free it exactly once.
 #[no_mangle]
-pub extern "C" fn disk_info_get_disk_totalspace(disk_info_ptr: *mut DiskInfo,
+pub unsafe extern "C" fn disk_info_get_disk_totalspace(disk_info_ptr: *mut DiskInfo,
                                                 index: usize) -> u64 {
 
-    let disk_info = unsafe {
+    // unsafe
+    let disk_info = {
         assert!(! disk_info_ptr.is_null());  // panic if pointer is null
         &*disk_info_ptr
     };
@@ -241,10 +272,16 @@ pub extern "C" fn disk_info_get_disk_totalspace(disk_info_ptr: *mut DiskInfo,
     disk_info.get_disk_usage_totalspace(index)
 }
 
+/// # Safety
+///
+/// This function should not be called if the pointer passed
+/// in is null or invalid.  Pass in a valid pointer to free it exactly once.
 #[no_mangle]
-pub extern "C" fn disk_info_get_disk_usage_diskcount(disk_info_ptr: *mut DiskInfo)
+pub unsafe extern "C" fn disk_info_get_disk_usage_diskcount(disk_info_ptr: *mut DiskInfo)
                                                      -> i32 {
-    let disk_info = unsafe {
+    
+    // unsafe
+    let disk_info = {
         assert!(! disk_info_ptr.is_null());  //panic if null
         &*disk_info_ptr
     };

@@ -15,8 +15,6 @@ $libSystemStatDef = @"
 $targetType = Add-Type -MemberDefinition $libSystemStatDef -Name "SystemInfo" -PassThru
 #$targetType | Get-Member
 
-#$addTargetType = Add-Type -MemberDefinition $libSystemStatDef -Name AddNumbers -PassThru
-
 $targetType::get_used_memory_info()
 $targetType::get_total_memory_info()
 #$targetType::get_system_info()

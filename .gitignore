@@ -14,7 +14,7 @@ Cargo.lock
 
 # Misc at repo root
 *.trace
-.DS_Store
+*.DS_Store
 
 
 

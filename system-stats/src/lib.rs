@@ -1,3 +1,19 @@
+/*
+* Copyright RChapman 2021
+* This file is part of PWshSystemStats.
+*
+* PWshSystemStats is free software: you can redistribute it and/or modify
+* it under the terms of the Affero GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version
+* PWshSystemStats is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* Affero GNU General Public License for more details
+* You should have received a copy of the Affero GNU General Public License
+* along with PWshSystemStats.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 extern crate sysinfo;
 extern crate libc;
 
@@ -320,17 +336,23 @@ mod tests {
     fn check_reference_types() {
         let core_usage = get_core_usage();
         assert_ne!(core_usage.is_null(),true);
-        free_core_usage(core_usage);
-
+        unsafe {
+            free_core_usage(core_usage);
+        }
         let system_info = get_system_info();
         assert_ne!(system_info.is_null(), true);
-        free_system_info_results(system_info);
-    
+        
+        unsafe {
+            free_system_info_results(system_info);
+        }
 
         let load_average = get_load_avg();
         assert_ne!(load_average.is_null(), true);
-        free_load_avg(load_average as *mut LoadAvg);
-
+        
+        unsafe {
+            free_load_avg(load_average as *mut LoadAvg);
+        }
+        
         let mut disk_info = DiskInfo::new();
         disk_info.query_disk_usage();
 

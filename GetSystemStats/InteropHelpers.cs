@@ -35,7 +35,7 @@ namespace InteropHelpers
 
         // Windows
         #if Windows
-            const string libPath = @"libsystem_stats.dll";
+            const string libPath = @"system_stats.dll";
         #endif
 
         [DllImport(libPath)]

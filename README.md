@@ -14,12 +14,13 @@ Simple, experiment with C# FFI to Rust, wrapped in a PowerShell Cmdlet. PowerShe
 * Rust Documentation
 * PowerShell default output formatting
 * Refactor SystemStatWarapper so each handle is it's own class
+* Output number formatting
 
 ## Usage and Build
 * Install Rust toolchain, .NET SDK 5, PowerShell 7 on your amd_64 platform of choice
 * Build all the things, a sample PowerShell script to build is in Start-Build.ps1.  
 * May need to adjust the build process for your platform specifics. 
-* Output number formatting
+
 
 ```
 # Using PowerShell
